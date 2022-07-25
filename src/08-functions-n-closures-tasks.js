@@ -59,11 +59,10 @@ function getPowerFunction(exponent) {
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-function getPolynom(/* ...argument */) {
-  throw new Error('Not implemented');
-  /* const args = arguments.reverse();
-  if (!args.length) return null;
-  return (x) => args.reduce((prev, cur, i) => prev + cur * x ** i, 0); */
+function getPolynom(...args) {
+  const argsArr = [...args].reverse();
+  if (!argsArr.length) return null;
+  return (x) => argsArr.reduce((prev, cur, i) => prev + cur * x ** i, 0);
 }
 
 /**
@@ -100,8 +99,20 @@ function memoize(func) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  let a = 0;
+  return function retryFunc() {
+    let result;
+    try {
+      a += 1;
+      result = func();
+    } catch (err) {
+      if (a < attempts) {
+        return retryFunc();
+      }
+    }
+    return result;
+  };
 }
 
 /**
@@ -144,8 +155,8 @@ function logger(/* func, logFunc */) {
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-function partialUsingArguments(/* fn, ...args1 */) {
-  throw new Error('Not implemented');
+function partialUsingArguments(fn, ...args1) {
+  return (...args) => fn(...args1, ...args);
 }
 
 /**
@@ -165,8 +176,12 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  let id = startFrom - 1;
+  return () => {
+    id += 1;
+    return id;
+  };
 }
 
 module.exports = {
